@@ -20,6 +20,9 @@ app.get('/api/', function (req, res){
     
     res.json(reply);
 });
+app.get('/', function(req, res){
+    
+});
 //start server
 app.listen(port, function () {
   console.log('Header parser app listening on port ' + port);
