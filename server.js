@@ -1,27 +1,24 @@
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 8080; //for Heroku
+//module to extract browser and os info from request //https://github.com/3rd-Eden/useragent
+var useragent = require('useragent');
 
 //answer to homepage requests
 app.use('/', express.static(__dirname + '/public'));
 
-
-
-//answer get requests with supplied parameters
+//answer get requests to the api
 app.get('/api/', function (req, res){
+    //use module to extract os data
+    var agent = useragent.parse(req.headers['user-agent']);
+    //create reply as per spec
     var reply = {
-        'ip address' : req.headers['x-forwarded-for'],
+        'ip_address' : req.headers['x-forwarded-for'],
         'language' : req.headers['accept-language'],
-        'browser' : req.headers['user-agent']
-        
+        'OS' : agent.os.family
     };
-    //req.headers.user-agent (browser)
-    //req.headers.accept-language (lang)
-    // req.headers.x-forwarded-for (ip)
-    var rrrr = req;
-    //console.log(req);
-    res.json(reply);
     
+    res.json(reply);
 });
 //start server
 app.listen(port, function () {
